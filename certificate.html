@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Certificate</title>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#02133b;
+color:white;
+padding:20px;
+}
+
+.certificate{
+max-width:800px;
+margin:auto;
+background:white;
+color:black;
+padding:40px;
+text-align:center;
+border-radius:15px;
+}
+
+h1{
+font-size:40px;
+}
+
+.name{
+font-size:35px;
+font-weight:bold;
+margin:20px 0;
+}
+
+.score{
+font-size:25px;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="certificate">
+
+<h1>🏅 Certificate of Achievement</h1>
+
+<p>Awarded To</p>
+
+<div class="name" id="studentName"></div>
+
+<p>For Completing KUMSKID Exam Tutor Practice Sessions</p>
+
+<div class="score" id="average"></div>
+
+</div>
+
+<script>
+
+let studentName =
+localStorage.getItem("studentName") || "Student";
+
+document.getElementById("studentName").innerHTML =
+studentName;
+
+let history =
+JSON.parse(localStorage.getItem("examHistory")) || [];
+
+let total = 0;
+
+history.forEach(item => {
+
+total += item.percentage;
+
+});
+
+let average =
+history.length > 0
+? Math.round(total/history.length)
+: 0;
+
+document.getElementById("average").innerHTML =
+"Average Score: " + average + "%";
+
+</script>
+
+</body>
+</html>
