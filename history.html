@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Results</title>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#02133b;
+color:white;
+padding:20px;
+}
+
+.container{
+max-width:800px;
+margin:auto;
+}
+
+.card{
+background:#10245c;
+padding:15px;
+margin-bottom:10px;
+border-radius:10px;
+}
+
+h1{
+text-align:center;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>📊 My Results</h1>
+
+<div id="results"></div>
+
+</div>
+
+<script>
+
+let history =
+JSON.parse(localStorage.getItem("examHistory")) || [];
+
+let html = "";
+
+history.reverse().forEach(result => {
+
+html += `
+<div class="card">
+
+<h3>${result.subject}</h3>
+
+<p>
+Score: ${result.score}/${result.total}
+</p>
+
+<p>
+Percentage: ${result.percentage}%
+</p>
+
+</div>
+`;
+
+});
+
+document.getElementById("results").innerHTML =
+html || "<p>No results yet.</p>";
+
+</script>
+
+</body>
+</html>
