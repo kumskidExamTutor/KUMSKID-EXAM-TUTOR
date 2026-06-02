@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AI Tutor</title>
+
+<style>
+
+body{
+background:#020f2b;
+color:white;
+font-family:Arial,sans-serif;
+padding:20px;
+}
+
+.container{
+max-width:700px;
+margin:auto;
+}
+
+select,input{
+width:100%;
+padding:12px;
+margin-bottom:15px;
+border-radius:10px;
+border:none;
+}
+
+button{
+width:100%;
+padding:12px;
+background:#2d8cff;
+color:white;
+border:none;
+border-radius:10px;
+}
+
+.answer{
+margin-top:20px;
+background:#0c1f4d;
+padding:20px;
+border-radius:15px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🤖 KUMSKID AI Tutor</h1>
+
+<select id="subject">
+<option>Mathematics</option>
+<option>English</option>
+<option>Physics</option>
+<option>Chemistry</option>
+<option>Biology</option>
+</select>
+
+<input
+type="text"
+id="question"
+placeholder="Ask your question..."
+>
+
+<button onclick="askTutor()">
+Ask Tutor
+</button>
+
+<div class="answer" id="answer">
+Your answer will appear here.
+</div>
+
+</div>
+
+<script>
+
+function askTutor(){
+
+let subject =
+document.getElementById("subject").value;
+
+let question =
+document.getElementById("question").value;
+
+document.getElementById("answer").innerHTML =
+"Subject: " + subject +
+"<br><br>" +
+"Question: " + question +
+"<br><br>" +
+"This is where OpenAI AI will answer when we connect the real AI later.";
+
+}
+
+</script>
+
+</body>
+</html>
