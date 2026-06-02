@@ -72,12 +72,6 @@ cursor:pointer;
 button:hover{
 opacity:.9;
 }
-
-#result{
-font-size:24px;
-text-align:center;
-margin-top:20px;
-}
 </style>
 </head>
 
@@ -96,19 +90,9 @@ margin-top:20px;
 <div id="options"></div>
 
 <div class="buttons">
-
-<button onclick="previousQuestion()">
-Previous
-</button>
-
-<button onclick="nextQuestion()">
-Next
-</button>
-
-<button onclick="submitExam()">
-Submit Exam
-</button>
-
+<button onclick="previousQuestion()">Previous</button>
+<button onclick="nextQuestion()">Next</button>
+<button onclick="submitExam()">Submit Exam</button>
 </div>
 
 </div>
@@ -124,7 +108,7 @@ answer:"Accommodation"
 },
 
 {
-question:"Select the synonym of 'Happy'.",
+question:"Select the synonym of Happy.",
 options:["Sad","Joyful","Angry","Weak"],
 answer:"Joyful"
 },
@@ -141,13 +125,13 @@ answer:"He goes to school every day"
 },
 
 {
-question:"Identify the noun in the sentence: 'The boy kicked the ball.'",
+question:"Identify the noun in the sentence: The boy kicked the ball.",
 options:["kicked","the","boy","ball"],
 answer:"boy"
 },
 
 {
-question:"Choose the opposite of 'Brave'.",
+question:"Choose the opposite of Brave.",
 options:["Bold","Fearful","Strong","Wise"],
 answer:"Fearful"
 }
@@ -157,34 +141,10 @@ answer:"Fearful"
 let currentQuestion = 0;
 let userAnswers = new Array(questions.length).fill(null);
 
-let timeLeft = 600;
-
-const timer = setInterval(() => {
-
-let minutes = Math.floor(timeLeft / 60);
-let seconds = timeLeft % 60;
-
-document.getElementById("timer").innerHTML =
-`Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-
-timeLeft--;
-
-if(timeLeft < 0){
-
-clearInterval(timer);
-
-submitExam();
-
-}
-
-},1000);
-
-loadQuestion();
-
 function loadQuestion(){
 
 document.getElementById("counter").innerHTML =
-`Question ${currentQuestion + 1} of ${questions.length}`;
+"Question " + (currentQuestion + 1) + " of " + questions.length;
 
 document.getElementById("question").innerHTML =
 questions[currentQuestion].question;
@@ -193,7 +153,7 @@ let html = "";
 
 questions[currentQuestion].options.forEach(option => {
 
-const checked =
+let checked =
 userAnswers[currentQuestion] === option
 ? "checked"
 : "";
@@ -204,7 +164,7 @@ html += `
 name="answer"
 value="${option}"
 ${checked}>
- ${option}
+${option}
 </label>
 `;
 
@@ -220,10 +180,7 @@ const selected =
 document.querySelector('input[name="answer"]:checked');
 
 if(selected){
-
-userAnswers[currentQuestion] =
-selected.value;
-
+userAnswers[currentQuestion] = selected.value;
 }
 
 }
@@ -233,11 +190,8 @@ function nextQuestion(){
 saveAnswer();
 
 if(currentQuestion < questions.length - 1){
-
 currentQuestion++;
-
 loadQuestion();
-
 }
 
 }
@@ -247,11 +201,8 @@ function previousQuestion(){
 saveAnswer();
 
 if(currentQuestion > 0){
-
 currentQuestion--;
-
 loadQuestion();
-
 }
 
 }
@@ -260,71 +211,51 @@ function submitExam(){
 
 saveAnswer();
 
-clearInterval(timer);
-
 let score = 0;
 
 for(let i=0;i<questions.length;i++){
 
 if(userAnswers[i] === questions[i].answer){
-
 score++;
+}
 
 }
 
-
 localStorage.setItem("examScore", score);
-
 localStorage.setItem("examTotal", questions.length);
 
 window.location.href = "result.html";
 
 }
 
-saveAnswer();
+let timeLeft = 600;
+
+const timer = setInterval(() => {
+
+let minutes = Math.floor(timeLeft / 60);
+let seconds = timeLeft % 60;
+
+document.getElementById("timer").innerHTML =
+"Time Left: " +
+minutes + ":" +
+(seconds < 10 ? "0" : "") +
+seconds;
+
+timeLeft--;
+
+if(timeLeft < 0){
 
 clearInterval(timer);
 
-let score = 0;
-
-for(let i=0;i<questions.length;i++){
-
-if(userAnswers[i] === questions[i].answer){
-
-score++;
+submitExam();
 
 }
 
-}
+},1000);
 
-let percentage =
-Math.round((score/questions.length)*100);
-
-document.querySelector(".container").innerHTML = `
-
-<h1>English Exam Submitted</h1>
-
-<div id="result">
-
-✅ Score: ${score}/${questions.length}
-
-<br><br>
-
-📊 Percentage: ${percentage}%
-
-<br><br>
-
-${percentage >= 70
-? "🎉 Excellent Work!"
-: "📚 Keep Practicing!"}
-
-</div>
-
-`;
-
-}
+loadQuestion();
 
 </script>
 
 </body>
-  </html>
+</html>
