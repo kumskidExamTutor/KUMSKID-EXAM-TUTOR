@@ -220,8 +220,22 @@ localStorage.setItem("examSubject", "Mathematics");
 localStorage.setItem("examScore", score);
 localStorage.setItem("examTotal", questions.length);
 
-window.location.href = "result.html";
+let history =
+JSON.parse(localStorage.getItem("examHistory")) || [];
 
+history.push({
+subject: "Mathematics",
+score: score,
+total: questions.length,
+percentage: Math.round((score/questions.length)*100)
+});
+
+localStorage.setItem(
+"examHistory",
+JSON.stringify(history)
+);
+
+window.location.href = "result.html";
 }
 
 let timeLeft = 600;
