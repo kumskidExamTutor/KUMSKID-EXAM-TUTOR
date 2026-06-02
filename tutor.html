@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>AI Tutor</title>
+<title>KUMSKID AI Tutor</title>
 
 <style>
 
@@ -16,8 +16,13 @@ padding:20px;
 }
 
 .container{
-max-width:700px;
+max-width:800px;
 margin:auto;
+}
+
+h1{
+text-align:center;
+margin-bottom:20px;
 }
 
 select,input{
@@ -26,6 +31,7 @@ padding:12px;
 margin-bottom:15px;
 border-radius:10px;
 border:none;
+font-size:16px;
 }
 
 button{
@@ -35,6 +41,12 @@ background:#2d8cff;
 color:white;
 border:none;
 border-radius:10px;
+cursor:pointer;
+font-size:16px;
+}
+
+button:hover{
+opacity:0.9;
 }
 
 .answer{
@@ -44,7 +56,29 @@ padding:20px;
 border-radius:15px;
 }
 
+.topic-box{
+background:#0c1f4d;
+padding:15px;
+border-radius:15px;
+margin-bottom:20px;
+}
+
+.topic-box ul{
+padding-left:20px;
+}
+
+.topic-box li{
+margin-bottom:8px;
+}
+
+hr{
+border:none;
+border-top:1px solid #2d8cff;
+margin:15px 0;
+}
+
 </style>
+
 </head>
 
 <body>
@@ -52,6 +86,23 @@ border-radius:15px;
 <div class="container">
 
 <h1>🤖 KUMSKID AI Tutor</h1>
+
+<div class="topic-box">
+
+<h3>📚 Popular Topics</h3>
+
+<ul>
+<li>Algebra</li>
+<li>Trigonometry</li>
+<li>Geometry</li>
+<li>Comprehension</li>
+<li>Lexis and Structure</li>
+<li>Physics Calculations</li>
+<li>Chemical Reactions</li>
+<li>Cell Biology</li>
+</ul>
+
+</div>
 
 <select id="subject">
 <option>Mathematics</option>
@@ -71,8 +122,13 @@ placeholder="Ask your question..."
 Ask Tutor
 </button>
 
-<div class="answer" id="answer">
-Your answer will appear here.
+<div id="chatBox" class="answer">
+
+<p>
+🤖 Welcome to KUMSKID AI Tutor.
+Select a subject and ask any question.
+</p>
+
 </div>
 
 </div>
@@ -91,9 +147,7 @@ let chat =
 document.getElementById("chatBox");
 
 if(question.trim() === ""){
-
 return;
-
 }
 
 chat.innerHTML += `
@@ -108,23 +162,50 @@ ${question}
 `;
 
 let reply =
-"Sorry, I don't know that answer yet.";
+"AI connection will be added later.";
 
 if(subject === "Mathematics"){
 
 reply =
-"Mathematics help: " +
+"📘 Mathematics Tutor: " +
 question +
-". AI explanation will appear here.";
+". When OpenAI is connected, step-by-step solutions will appear here.";
 
 }
 
-if(subject === "English"){
+else if(subject === "English"){
 
 reply =
-"English help: " +
+"📗 English Tutor: " +
 question +
-". AI explanation will appear here.";
+". Grammar, vocabulary and comprehension explanations will appear here.";
+
+}
+
+else if(subject === "Physics"){
+
+reply =
+"⚡ Physics Tutor: " +
+question +
+". Physics explanations will appear here.";
+
+}
+
+else if(subject === "Chemistry"){
+
+reply =
+"🧪 Chemistry Tutor: " +
+question +
+". Chemistry explanations will appear here.";
+
+}
+
+else if(subject === "Biology"){
+
+reply =
+"🧬 Biology Tutor: " +
+question +
+". Biology explanations will appear here.";
 
 }
 
@@ -138,21 +219,6 @@ ${reply}
 `;
 
 document.getElementById("question").value = "";
-
-}
-
-let subject =
-document.getElementById("subject").value;
-
-let question =
-document.getElementById("question").value;
-
-document.getElementById("answer").innerHTML =
-"Subject: " + subject +
-"<br><br>" +
-"Question: " + question +
-"<br><br>" +
-"This is where OpenAI AI will answer when we connect the real AI later.";
 
 }
 
