@@ -80,10 +80,56 @@ Time Left: 05:00
 
 <div id="options"></div>
 
-<button onclick="nextQuestion()">
-Next Question
+<div style="margin-top:20px;">
+
+<button onclick="previousQuestion()">
+Previous
 </button>
 
+<button onclick="nextQuestion()">
+Next
+</button>
+
+<button onclick="submitExam()">
+Submit Exam
+</button>
+
+</div>
+function previousQuestion(){
+
+if(currentQuestion > 0){
+
+currentQuestion--;
+
+loadQuestion();
+
+}
+
+}
+
+function submitExam(){
+
+clearInterval(timer);
+
+document.querySelector(".container").innerHTML = `
+
+<h1>Exam Submitted</h1>
+
+<div id="result">
+
+✅ Your Score: ${score}/${questions.length}
+
+<br><br>
+
+Percentage:
+
+${Math.round((score/questions.length)*100)}%
+
+</div>
+
+`;
+
+}
 <div id="result"></div>
 
 </div>
