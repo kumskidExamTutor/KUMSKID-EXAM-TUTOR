@@ -115,5 +115,47 @@ document.getElementById("welcome").innerHTML =
 "🎓 Welcome " + studentName;
 
 </script>
+  <script>
+
+let history =
+JSON.parse(localStorage.getItem("examHistory")) || [];
+
+let totalExams = history.length;
+
+let totalPercent = 0;
+
+let bestSubject = "None";
+
+let highestScore = 0;
+
+history.forEach(result => {
+
+totalPercent += result.percentage;
+
+if(result.percentage > highestScore){
+
+highestScore = result.percentage;
+
+bestSubject = result.subject;
+
+}
+
+});
+
+let averageScore =
+totalExams > 0
+? Math.round(totalPercent / totalExams)
+: 0;
+
+document.getElementById("totalExams").innerHTML =
+"Total Exams: " + totalExams;
+
+document.getElementById("averageScore").innerHTML =
+"Average Score: " + averageScore + "%";
+
+document.getElementById("bestSubject").innerHTML =
+"Best Subject: " + bestSubject;
+
+  </script>
 </body>
 </html>
