@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WAEC Subjects - KUMSKID Exam Tutor</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#020f2b;
+color:white;
+padding:20px;
+}
+
+.header{
+text-align:center;
+margin-bottom:40px;
+}
+
+.header h1{
+font-size:2.5rem;
+margin-bottom:10px;
+}
+
+.header p{
+color:#ccc;
+}
+
+.subjects{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+max-width:1000px;
+margin:auto;
+}
+
+.subject{
+background:#0c1f4d;
+padding:25px;
+border-radius:15px;
+text-align:center;
+transition:0.3s;
+}
+
+.subject:hover{
+transform:translateY(-5px);
+}
+
+.subject h3{
+margin-bottom:15px;
+}
+
+.subject a{
+display:inline-block;
+padding:12px 25px;
+background:#2d8cff;
+color:white;
+text-decoration:none;
+border-radius:10px;
+font-weight:bold;
+}
+
+.back{
+display:block;
+width:200px;
+margin:40px auto;
+text-align:center;
+padding:12px;
+background:#2d8cff;
+border-radius:10px;
+color:white;
+text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<h1>WAEC Subjects</h1>
+<p>Select a subject to start practicing</p>
+</div>
+
+<div class="subjects">
+
+<div class="subject">
+<h3>Mathematics</h3>
+<a href="math.html">Start Practice</a>
+</div>
+
+<div class="subject">
+<h3>English Language</h3>
+<a href="#">Start Practice</a>
+</div>
+
+<div class="subject">
+<h3>Physics</h3>
+<a href="#">Start Practice</a>
+</div>
+
+<div class="subject">
+<h3>Chemistry</h3>
+<a href="#">Start Practice</a>
+</div>
+
+<div class="subject">
+<h3>Biology</h3>
+<a href="#">Start Practice</a>
+</div>
+
+<div class="subject">
+<h3>Economics</h3>
+<a href="#">Start Practice</a>
+</div>
+
+</div>
+
+<a class="back" href="index.html">← Back Home</a>
+
+</body>
+  </html>
