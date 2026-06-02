@@ -127,6 +127,36 @@ answer:"5"
 let currentQuestion = 0;
 let score = 0;
 
+let timeLeft = 300;
+const timer = setInterval(() => {
+
+let minutes = Math.floor(timeLeft / 60);
+let seconds = timeLeft % 60;
+
+document.getElementById("timer").innerHTML =
+`Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+timeLeft--;
+
+if(timeLeft < 0){
+
+clearInterval(timer);
+
+document.querySelector(".container").innerHTML = `
+<h1>Time Up!</h1>
+
+<div id="result">
+⏰ Exam Ended
+
+<br><br>
+
+Your Score: ${score}/${questions.length}
+</div>
+`;
+
+}
+
+},1000);
 loadQuestion();
 
 function loadQuestion(){
