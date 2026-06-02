@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mathematics CBT</title>
+
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#020f2b;
+color:white;
+padding:20px;
+}
+
+.container{
+max-width:700px;
+margin:auto;
+background:#0c1f4d;
+padding:25px;
+border-radius:15px;
+}
+
+h1{
+text-align:center;
+margin-bottom:20px;
+}
+
+.question{
+font-size:22px;
+margin-bottom:20px;
+}
+
+.option{
+display:block;
+margin:10px 0;
+padding:12px;
+background:#132b66;
+border-radius:10px;
+cursor:pointer;
+}
+
+button{
+margin-top:20px;
+padding:12px 25px;
+border:none;
+background:#2d8cff;
+color:white;
+border-radius:10px;
+font-size:16px;
+cursor:pointer;
+}
+
+#result{
+margin-top:20px;
+font-size:22px;
+font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>WAEC Mathematics CBT</h1>
+
+<div class="question">
+What is 2 + 2 ?
+</div>
+
+<label class="option">
+<input type="radio" name="answer" value="A">
+A. 3
+</label>
+
+<label class="option">
+<input type="radio" name="answer" value="B">
+B. 4
+</label>
+
+<label class="option">
+<input type="radio" name="answer" value="C">
+C. 5
+</label>
+
+<label class="option">
+<input type="radio" name="answer" value="D">
+D. 6
+</label>
+
+<button onclick="checkAnswer()">
+Submit Answer
+</button>
+
+<div id="result"></div>
+
+</div>
+
+<script>
+function checkAnswer(){
+
+const answer =
+document.querySelector('input[name="answer"]:checked');
+
+if(!answer){
+alert("Select an answer");
+return;
+}
+
+if(answer.value==="B"){
+document.getElementById("result").innerHTML =
+"✅ Correct! Score: 1/1";
+}else{
+document.getElementById("result").innerHTML =
+"❌ Wrong! Correct answer is B";
+}
+}
+</script>
+
+</body>
+</html>
