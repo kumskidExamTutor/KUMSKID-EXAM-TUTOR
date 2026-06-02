@@ -57,7 +57,7 @@ margin-top:10px;
 
 <body>
 
-<h1>🎓 Student Dashboard</h1>
+<h1 id="welcome">🎓 Student Dashboard</h1>
 
 <p>Select a subject to begin practice</p>
 
@@ -96,6 +96,14 @@ margin-top:10px;
 📊 View My Results
 </a>
 </div>
+<script>
 
+let studentName =
+localStorage.getItem("studentName") || "Student";
+
+document.getElementById("welcome").innerHTML =
+"🎓 Welcome " + studentName;
+
+</script>
 </body>
 </html>
