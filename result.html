@@ -96,7 +96,11 @@ Back To Dashboard
 </div>
 
 <script>
+let subject =
+localStorage.getItem("examSubject") || "Unknown Subject";
 
+document.getElementById("subject").innerHTML =
+"📘 " + subject;
 let score =
 localStorage.getItem("examScore") || 0;
 
