@@ -87,6 +87,66 @@ document.getElementById("subject").value;
 let question =
 document.getElementById("question").value;
 
+let chat =
+document.getElementById("chatBox");
+
+if(question.trim() === ""){
+
+return;
+
+}
+
+chat.innerHTML += `
+
+<hr>
+
+<p>
+👨‍🎓 <strong>You:</strong>
+${question}
+</p>
+
+`;
+
+let reply =
+"Sorry, I don't know that answer yet.";
+
+if(subject === "Mathematics"){
+
+reply =
+"Mathematics help: " +
+question +
+". AI explanation will appear here.";
+
+}
+
+if(subject === "English"){
+
+reply =
+"English help: " +
+question +
+". AI explanation will appear here.";
+
+}
+
+chat.innerHTML += `
+
+<p>
+🤖 <strong>KUMSKID AI:</strong>
+${reply}
+</p>
+
+`;
+
+document.getElementById("question").value = "";
+
+}
+
+let subject =
+document.getElementById("subject").value;
+
+let question =
+document.getElementById("question").value;
+
 document.getElementById("answer").innerHTML =
 "Subject: " + subject +
 "<br><br>" +
