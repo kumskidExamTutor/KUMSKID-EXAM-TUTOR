@@ -253,6 +253,14 @@ loadQuestion();
 
 function submitExam(){
 
+localStorage.setItem("examScore", score);
+
+localStorage.setItem("examTotal", questions.length);
+
+window.location.href = "result.html";
+
+}
+
 saveAnswer();
 
 clearInterval(timer);
