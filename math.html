@@ -72,12 +72,6 @@ cursor:pointer;
 button:hover{
 opacity:.9;
 }
-
-#result{
-font-size:24px;
-text-align:center;
-margin-top:20px;
-}
 </style>
 </head>
 
@@ -96,19 +90,9 @@ margin-top:20px;
 <div id="options"></div>
 
 <div class="buttons">
-
-<button onclick="previousQuestion()">
-Previous
-</button>
-
-<button onclick="nextQuestion()">
-Next
-</button>
-
-<button onclick="submitExam()">
-Submit Exam
-</button>
-
+<button onclick="previousQuestion()">Previous</button>
+<button onclick="nextQuestion()">Next</button>
+<button onclick="submitExam()">Submit Exam</button>
 </div>
 
 </div>
@@ -152,34 +136,10 @@ answer:"5"
 let currentQuestion = 0;
 let userAnswers = new Array(questions.length).fill(null);
 
-let timeLeft = 600;
-
-const timer = setInterval(() => {
-
-let minutes = Math.floor(timeLeft / 60);
-let seconds = timeLeft % 60;
-
-document.getElementById("timer").innerHTML =
-`Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-
-timeLeft--;
-
-if(timeLeft < 0){
-
-clearInterval(timer);
-
-submitExam();
-
-}
-
-},1000);
-
-loadQuestion();
-
 function loadQuestion(){
 
 document.getElementById("counter").innerHTML =
-`Question ${currentQuestion + 1} of ${questions.length}`;
+"Question " + (currentQuestion + 1) + " of " + questions.length;
 
 document.getElementById("question").innerHTML =
 questions[currentQuestion].question;
@@ -188,7 +148,7 @@ let html = "";
 
 questions[currentQuestion].options.forEach(option => {
 
-const checked =
+let checked =
 userAnswers[currentQuestion] === option
 ? "checked"
 : "";
@@ -199,7 +159,7 @@ html += `
 name="answer"
 value="${option}"
 ${checked}>
- ${option}
+${option}
 </label>
 `;
 
@@ -215,10 +175,7 @@ const selected =
 document.querySelector('input[name="answer"]:checked');
 
 if(selected){
-
-userAnswers[currentQuestion] =
-selected.value;
-
+userAnswers[currentQuestion] = selected.value;
 }
 
 }
@@ -228,11 +185,8 @@ function nextQuestion(){
 saveAnswer();
 
 if(currentQuestion < questions.length - 1){
-
 currentQuestion++;
-
 loadQuestion();
-
 }
 
 }
@@ -242,67 +196,59 @@ function previousQuestion(){
 saveAnswer();
 
 if(currentQuestion > 0){
-
 currentQuestion--;
-
 loadQuestion();
-
 }
 
 }
 
 function submitExam(){
 
-localStorage.setItem("examScore", score);
-
-localStorage.setItem("examTotal", questions.length);
-
-window.location.href = "result.html";
-
-}
-
 saveAnswer();
-
-clearInterval(timer);
 
 let score = 0;
 
 for(let i=0;i<questions.length;i++){
 
 if(userAnswers[i] === questions[i].answer){
-
 score++;
-
 }
 
 }
 
-let percentage =
-Math.round((score/questions.length)*100);
+localStorage.setItem("examScore", score);
+localStorage.setItem("examTotal", questions.length);
 
-document.querySelector(".container").innerHTML = `
-
-<h1>Exam Submitted</h1>
-
-<div id="result">
-
-✅ Score: ${score}/${questions.length}
-
-<br><br>
-
-📊 Percentage: ${percentage}%
-
-<br><br>
-
-${percentage >= 70
-? "🎉 Excellent Work!"
-: "📚 Keep Practicing!"}
-
-</div>
-
-`;
+window.location.href = "result.html";
 
 }
+
+let timeLeft = 600;
+
+const timer = setInterval(() => {
+
+let minutes = Math.floor(timeLeft / 60);
+let seconds = timeLeft % 60;
+
+document.getElementById("timer").innerHTML =
+"Time Left: " +
+minutes + ":" +
+(seconds < 10 ? "0" : "") +
+seconds;
+
+timeLeft--;
+
+if(timeLeft < 0){
+
+clearInterval(timer);
+
+submitExam();
+
+}
+
+},1000);
+
+loadQuestion();
 
 </script>
 
