@@ -1,4 +1,126 @@
-alert("AI button clicked");
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>KUMSKID AI Tutor</title>
+
+<style>
+
+body{
+background:#020f2b;
+color:white;
+font-family:Arial,sans-serif;
+padding:20px;
+}
+
+.container{
+max-width:800px;
+margin:auto;
+}
+
+h1{
+text-align:center;
+}
+
+.topic-box{
+background:#0c1f4d;
+padding:15px;
+border-radius:15px;
+margin-bottom:20px;
+}
+
+select,input{
+width:100%;
+padding:12px;
+margin-bottom:15px;
+border-radius:10px;
+border:none;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:12px;
+background:#2d8cff;
+color:white;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-size:16px;
+}
+
+.answer{
+margin-top:20px;
+background:#0c1f4d;
+padding:20px;
+border-radius:15px;
+}
+
+hr{
+border:none;
+border-top:1px solid #2d8cff;
+margin:15px 0;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🤖 KUMSKID AI Tutor</h1>
+
+<div class="topic-box">
+
+<h3>📚 Popular Topics</h3>
+
+<ul>
+<li>Algebra</li>
+<li>Trigonometry</li>
+<li>Geometry</li>
+<li>Comprehension</li>
+<li>Lexis and Structure</li>
+<li>Physics Calculations</li>
+<li>Chemical Reactions</li>
+<li>Cell Biology</li>
+</ul>
+
+</div>
+
+<select id="subject">
+<option>Mathematics</option>
+<option>English</option>
+<option>Physics</option>
+<option>Chemistry</option>
+<option>Biology</option>
+</select>
+
+<input
+type="text"
+id="question"
+placeholder="Ask your question..."
+>
+
+<button onclick="askTutor()">
+Ask Tutor
+</button>
+
+<div id="chatBox" class="answer">
+
+<p>
+🤖 Welcome to KUMSKID AI Tutor.
+Ask any academic question.
+</p>
+
+</div>
+
+</div>
+
+<script>
+
 async function askTutor(){
 
 let subject =
@@ -47,8 +169,7 @@ model:"llama-3.3-70b-versatile",
 messages:[
 {
 role:"system",
-content:`
-You are KUMSKID Exam Tutor.
+content:`You are KUMSKID Exam Tutor.
 
 You help WAEC and JAMB students.
 
@@ -58,8 +179,7 @@ Use simple language.
 
 Focus on educational topics.
 
-Subject: ${subject}
-`
+Subject: ${subject}`
 },
 {
 role:"user",
@@ -75,11 +195,16 @@ temperature:0.5
 
 const data = await response.json();
 
-document.getElementById("loading").remove();
+let loading =
+document.getElementById("loading");
+
+if(loading){
+loading.remove();
+}
 
 let answer =
 data.choices?.[0]?.message?.content ||
-"No response received.";
+"❌ No response received from AI.";
 
 chat.innerHTML += `
 
@@ -93,7 +218,12 @@ ${answer}
 }
 catch(error){
 
-document.getElementById("loading").remove();
+let loading =
+document.getElementById("loading");
+
+if(loading){
+loading.remove();
+}
 
 chat.innerHTML += `
 
@@ -108,3 +238,8 @@ console.log(error);
 }
 
 }
+
+</script>
+
+</body>
+</html>
