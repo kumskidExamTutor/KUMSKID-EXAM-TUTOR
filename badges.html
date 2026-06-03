@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Achievements & Badges</title>
+
+<style>
+
+body{
+background:#020f2b;
+color:white;
+font-family:Arial,sans-serif;
+padding:20px;
+}
+
+.container{
+max-width:800px;
+margin:auto;
+}
+
+h1{
+text-align:center;
+}
+
+.badge{
+background:#0c1f4d;
+padding:20px;
+margin-bottom:15px;
+border-radius:15px;
+font-size:20px;
+}
+
+.locked{
+opacity:0.4;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🏅 My Achievements</h1>
+
+<div id="badges"></div>
+
+</div>
+
+<script>
+
+let history =
+JSON.parse(localStorage.getItem("examHistory")) || [];
+
+let totalExams = history.length;
+
+let highest = 0;
+
+history.forEach(result => {
+
+if(result.percentage > highest){
+highest = result.percentage;
+}
+
+});
+
+let html = "";
+
+html += `
+<div class="badge ${totalExams >= 1 ? '' : 'locked'}">
+🥉 Beginner
+<br>
+Complete 1 Exam
+</div>
+`;
+
+html += `
+<div class="badge ${totalExams >= 5 ? '' : 'locked'}">
+🥈 Intermediate
+<br>
+Complete 5 Exams
+</div>
+`;
+
+html += `
+<div class="badge ${totalExams >= 10 ? '' : 'locked'}">
+🥇 Scholar
+<br>
+Complete 10 Exams
+</div>
+`;
+
+html += `
+<div class="badge ${highest >= 80 ? '' : 'locked'}">
+🏆 WAEC Master
+<br>
+Score 80% or Higher
+</div>
+`;
+
+html += `
+<div class="badge ${highest >= 90 ? '' : 'locked'}">
+👑 JAMB Champion
+<br>
+Score 90% or Higher
+</div>
+`;
+
+document.getElementById("badges").innerHTML =
+html;
+
+</script>
+
+</body>
+</html>
