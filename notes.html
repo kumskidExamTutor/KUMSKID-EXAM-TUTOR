@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AI Notes Generator</title>
+
+<style>
+
+body{
+background:#020f2b;
+color:white;
+font-family:Arial,sans-serif;
+padding:20px;
+}
+
+.container{
+max-width:800px;
+margin:auto;
+}
+
+h1{
+text-align:center;
+}
+
+select,input{
+width:100%;
+padding:12px;
+margin-bottom:15px;
+border:none;
+border-radius:10px;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:12px;
+background:#2d8cff;
+color:white;
+border:none;
+border-radius:10px;
+font-size:16px;
+cursor:pointer;
+}
+
+.result{
+background:#0c1f4d;
+padding:20px;
+border-radius:15px;
+margin-top:20px;
+white-space:pre-wrap;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>📚 AI Notes Generator</h1>
+
+<select id="subject">
+<option>Mathematics</option>
+<option>English</option>
+<option>Physics</option>
+<option>Chemistry</option>
+<option>Biology</option>
+</select>
+
+<input
+type="text"
+id="topic"
+placeholder="Enter Topic"
+>
+
+<button onclick="generateNotes()">
+Generate Notes
+</button>
+
+<div id="result" class="result">
+Your notes will appear here...
+</div>
+
+</div>
+
+<script>
+
+async function generateNotes(){
+
+let subject =
+document.getElementById("subject").value;
+
+let topic =
+document.getElementById("topic").value;
+
+if(topic.trim() === ""){
+alert("Enter a topic");
+return;
+}
+
+document.getElementById("result").innerHTML =
+"🤖 Generating notes...";
+
+try{
+
+const response = await fetch(
+"https://kumskid-nova-ai.pages.dev/groq",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+
+model:"llama-3.3-70b-versatile",
+
+messages:[
+{
+role:"system",
+content:`
+You are KUMSKID AI Notes Generator.
+
+Create study notes for students.
+
+Include:
+
+1. Topic Summary
+2. Important Points
+3. WAEC/JAMB Exam Tips
+4. Common Mistakes
+5. 3 Practice Questions
+
+Use simple language.
+`
+},
+{
+role:"user",
+content:
+"Subject: " + subject +
+"\nTopic: " + topic
+}
+],
+
+temperature:0.5
+
+})
+}
+);
+
+const data = await response.json();
+
+let notes =
+data.choices?.[0]?.message?.content ||
+"No notes generated.";
+
+document.getElementById("result").innerText =
+notes;
+
+}
+catch(error){
+
+document.getElementById("result").innerHTML =
+"❌ Error generating notes.";
+
+console.log(error);
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
