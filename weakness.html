@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weakness Detector</title>
+
+<style>
+body{
+background:#020f2b;
+color:white;
+font-family:Arial,sans-serif;
+padding:20px;
+}
+
+.container{
+max-width:800px;
+margin:auto;
+}
+
+h1{
+text-align:center;
+}
+
+button{
+width:100%;
+padding:12px;
+background:#2d8cff;
+color:white;
+border:none;
+border-radius:10px;
+font-size:16px;
+cursor:pointer;
+}
+
+.result{
+background:#0c1f4d;
+padding:20px;
+border-radius:15px;
+margin-top:20px;
+white-space:pre-wrap;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🎯 Weakness Detector</h1>
+
+<button onclick="detectWeakness()">
+Analyze My Weak Areas
+</button>
+
+<div id="result" class="result">
+Your analysis will appear here...
+</div>
+
+</div>
+
+<script>
+
+async function detectWeakness(){
+
+let history =
+JSON.parse(localStorage.getItem("examHistory")) || [];
+
+if(history.length === 0){
+
+document.getElementById("result").innerHTML =
+"No exam records found.";
+
+return;
+}
+
+document.getElementById("result").innerHTML =
+"🤖 Analyzing performance...";
+
+try{
+
+const response = await fetch(
+"https://kumskid-nova-ai.pages.dev/groq",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+
+model:"llama-3.3-70b-versatile",
+
+messages:[
+{
+role:"system",
+content:`
+You are KUMSKID Academic Advisor.
+
+Analyze student exam history.
+
+Provide:
+
+1. Strongest subject
+2. Weakest subject
+3. Improvement areas
+4. Study recommendations
+5. Topics to focus on
+6. Weekly study advice
+
+Use simple language.
+`
+},
+{
+role:"user",
+content:
+"Student Results: " +
+JSON.stringify(history)
+}
+],
+
+temperature:0.5
+
+})
+}
+);
+
+const data = await response.json();
+
+let analysis =
+data.choices?.[0]?.message?.content ||
+"No analysis available.";
+
+document.getElementById("result").innerText =
+analysis;
+
+}
+catch(error){
+
+document.getElementById("result").innerHTML =
+"❌ Error analyzing performance.";
+
+console.log(error);
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
