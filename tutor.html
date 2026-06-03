@@ -1,141 +1,4 @@
- <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>KUMSKID AI Tutor</title>
-
-<style>
-
-body{
-background:#020f2b;
-color:white;
-font-family:Arial,sans-serif;
-padding:20px;
-}
-
-.container{
-max-width:800px;
-margin:auto;
-}
-
-h1{
-text-align:center;
-margin-bottom:20px;
-}
-
-select,input{
-width:100%;
-padding:12px;
-margin-bottom:15px;
-border-radius:10px;
-border:none;
-font-size:16px;
-}
-
-button{
-width:100%;
-padding:12px;
-background:#2d8cff;
-color:white;
-border:none;
-border-radius:10px;
-cursor:pointer;
-font-size:16px;
-}
-
-button:hover{
-opacity:0.9;
-}
-
-.answer{
-margin-top:20px;
-background:#0c1f4d;
-padding:20px;
-border-radius:15px;
-}
-
-.topic-box{
-background:#0c1f4d;
-padding:15px;
-border-radius:15px;
-margin-bottom:20px;
-}
-
-.topic-box ul{
-padding-left:20px;
-}
-
-.topic-box li{
-margin-bottom:8px;
-}
-
-hr{
-border:none;
-border-top:1px solid #2d8cff;
-margin:15px 0;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="container">
-
-<h1>🤖 KUMSKID AI Tutor</h1>
-
-<div class="topic-box">
-
-<h3>📚 Popular Topics</h3>
-
-<ul>
-<li>Algebra</li>
-<li>Trigonometry</li>
-<li>Geometry</li>
-<li>Comprehension</li>
-<li>Lexis and Structure</li>
-<li>Physics Calculations</li>
-<li>Chemical Reactions</li>
-<li>Cell Biology</li>
-</ul>
-
-</div>
-
-<select id="subject">
-<option>Mathematics</option>
-<option>English</option>
-<option>Physics</option>
-<option>Chemistry</option>
-<option>Biology</option>
-</select>
-
-<input
-type="text"
-id="question"
-placeholder="Ask your question..."
->
-
-<button onclick="askTutor()">
-Ask Tutor
-</button>
-
-<div id="chatBox" class="answer">
-
-<p>
-🤖 Welcome to KUMSKID AI Tutor.
-Select a subject and ask any question.
-</p>
-
-</div>
-
-</div>
-
-<script>
-
-function askTutor(){
+async function askTutor(){
 
 let subject =
 document.getElementById("subject").value;
@@ -159,70 +22,88 @@ chat.innerHTML += `
 ${question}
 </p>
 
-`;
-
-let reply =
-"AI connection will be added later.";
-
-if(subject === "Mathematics"){
-
-reply =
-"📘 Mathematics Tutor: " +
-question +
-". When OpenAI is connected, step-by-step solutions will appear here.";
-
-}
-
-else if(subject === "English"){
-
-reply =
-"📗 English Tutor: " +
-question +
-". Grammar, vocabulary and comprehension explanations will appear here.";
-
-}
-
-else if(subject === "Physics"){
-
-reply =
-"⚡ Physics Tutor: " +
-question +
-". Physics explanations will appear here.";
-
-}
-
-else if(subject === "Chemistry"){
-
-reply =
-"🧪 Chemistry Tutor: " +
-question +
-". Chemistry explanations will appear here.";
-
-}
-
-else if(subject === "Biology"){
-
-reply =
-"🧬 Biology Tutor: " +
-question +
-". Biology explanations will appear here.";
-
-}
-
-chat.innerHTML += `
-
-<p>
-🤖 <strong>KUMSKID AI:</strong>
-${reply}
+<p id="loading">
+🤖 KUMSKID AI is thinking...
 </p>
 
 `;
 
 document.getElementById("question").value = "";
 
+try{
+
+const response = await fetch(
+"https://kumskid-nova-ai.pages.dev/groq",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+
+model:"llama-3.3-70b-versatile",
+
+messages:[
+{
+role:"system",
+content:`
+You are KUMSKID Exam Tutor.
+
+You help WAEC and JAMB students.
+
+Explain answers step-by-step.
+
+Use simple language.
+
+Focus on educational topics.
+
+Subject: ${subject}
+`
+},
+{
+role:"user",
+content:question
+}
+],
+
+temperature:0.5
+
+})
+}
+);
+
+const data = await response.json();
+
+document.getElementById("loading").remove();
+
+let answer =
+data.choices?.[0]?.message?.content ||
+"No response received.";
+
+chat.innerHTML += `
+
+<p>
+🤖 <strong>KUMSKID AI:</strong>
+${answer}
+</p>
+
+`;
+
+}
+catch(error){
+
+document.getElementById("loading").remove();
+
+chat.innerHTML += `
+
+<p>
+❌ Error connecting to AI.
+</p>
+
+`;
+
+console.log(error);
+
 }
 
-</script>
-
-</body>
-</html>
+}
