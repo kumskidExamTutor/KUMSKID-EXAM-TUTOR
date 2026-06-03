@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AI Question Generator</title>
+
+<style>
+
+body{
+background:#020f2b;
+color:white;
+font-family:Arial,sans-serif;
+padding:20px;
+}
+
+.container{
+max-width:800px;
+margin:auto;
+}
+
+h1{
+text-align:center;
+}
+
+select,input{
+width:100%;
+padding:12px;
+margin-bottom:15px;
+border:none;
+border-radius:10px;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:12px;
+background:#2d8cff;
+color:white;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-size:16px;
+}
+
+.result{
+background:#0c1f4d;
+padding:20px;
+border-radius:15px;
+margin-top:20px;
+white-space:pre-wrap;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🧠 AI Question Generator</h1>
+
+<select id="subject">
+
+<option>Mathematics</option>
+<option>English</option>
+<option>Physics</option>
+<option>Chemistry</option>
+<option>Biology</option>
+
+</select>
+
+<input
+type="text"
+id="topic"
+placeholder="Enter Topic (Example: Algebra)"
+>
+
+<input
+type="number"
+id="number"
+placeholder="Number of Questions"
+value="5"
+>
+
+<button onclick="generateQuestions()">
+Generate Questions
+</button>
+
+<div id="result" class="result">
+
+Generated questions will appear here...
+
+</div>
+
+</div>
+
+<script>
+
+async function generateQuestions(){
+
+let subject =
+document.getElementById("subject").value;
+
+let topic =
+document.getElementById("topic").value;
+
+let number =
+document.getElementById("number").value;
+
+if(topic.trim() === ""){
+
+alert("Enter a topic");
+
+return;
+
+}
+
+document.getElementById("result").innerHTML =
+"🤖 Generating questions...";
+
+try{
+
+const response = await fetch(
+"https://kumskid-nova-ai.pages.dev/groq",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+
+model:"llama-3.3-70b-versatile",
+
+messages:[
+{
+role:"system",
+content:`
+You are KUMSKID Question Generator.
+
+Generate ${number} WAEC/JAMB style multiple-choice questions.
+
+Subject: ${subject}
+
+Topic: ${topic}
+
+Rules:
+
+1. Number each question.
+2. Provide four options A-D.
+3. Show the correct answer below each question.
+4. Make questions suitable for WAEC/JAMB.
+5. Use clear formatting.
+`
+}
+],
+
+temperature:0.7
+
+})
+}
+);
+
+const data = await response.json();
+
+let answer =
+data.choices?.[0]?.message?.content ||
+"No questions generated.";
+
+document.getElementById("result").innerText =
+answer;
+
+}
+catch(error){
+
+document.getElementById("result").innerHTML =
+"❌ Error generating questions.";
+
+console.log(error);
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
