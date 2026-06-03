@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PDF Notes Download</title>
+
+<style>
+
+body{
+background:#020f2b;
+font-family:Arial,sans-serif;
+color:white;
+padding:20px;
+}
+
+.container{
+max-width:800px;
+margin:auto;
+}
+
+h1{
+text-align:center;
+margin-bottom:20px;
+}
+
+.card{
+background:#0c1f4d;
+padding:20px;
+border-radius:15px;
+margin-bottom:15px;
+}
+
+.btn{
+display:inline-block;
+padding:12px 20px;
+background:#2d8cff;
+color:white;
+text-decoration:none;
+border-radius:10px;
+margin-top:10px;
+border:none;
+cursor:pointer;
+}
+
+.premium{
+background:#ff9800;
+}
+
+.lock{
+font-size:22px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>📄 PDF Notes Download</h1>
+
+<div class="card">
+<h2>📘 Mathematics Notes</h2>
+<p>Algebra, Trigonometry, Geometry, Statistics</p>
+<a href="pdf/math-notes.pdf" class="btn">
+Download PDF
+</a>
+</div>
+
+<div class="card">
+<h2>📗 English Notes</h2>
+<p>Grammar, Comprehension, Essay Writing</p>
+<a href="pdf/english-notes.pdf" class="btn">
+Download PDF
+</a>
+</div>
+
+<div class="card">
+<h2>📙 Physics Notes</h2>
+<p>Motion, Energy, Electricity, Waves</p>
+<a href="pdf/physics-notes.pdf" class="btn">
+Download PDF
+</a>
+</div>
+
+<div class="card">
+<h2>📕 Chemistry Notes</h2>
+<p>Atoms, Acids, Bases, Organic Chemistry</p>
+<a href="pdf/chemistry-notes.pdf" class="btn">
+Download PDF
+</a>
+</div>
+
+<div class="card">
+<h2>📔 Biology Notes</h2>
+<p>Cells, Genetics, Ecology, Human Systems</p>
+<a href="pdf/biology-notes.pdf" class="btn">
+Download PDF
+</a>
+</div>
+
+<div class="card premium">
+
+<h2 class="lock">
+🔒 Premium Notes
+</h2>
+
+<p>
+JAMB Past Questions + Solutions
+</p>
+
+<button class="btn premium"
+onclick="checkPremium()">
+Unlock Premium
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+function checkPremium(){
+
+let tier =
+localStorage.getItem("membership") || "free";
+
+if(tier === "premium"){
+
+alert("Premium Notes Unlocked");
+
+}
+else{
+
+window.location.href =
+"premium.html";
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
