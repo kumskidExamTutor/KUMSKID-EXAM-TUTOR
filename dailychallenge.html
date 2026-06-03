@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Daily Challenge</title>
+
+<style>
+
+body{
+background:#020f2b;
+color:white;
+font-family:Arial,sans-serif;
+padding:20px;
+}
+
+.container{
+max-width:800px;
+margin:auto;
+}
+
+h1{
+text-align:center;
+}
+
+button{
+width:100%;
+padding:12px;
+background:#2d8cff;
+color:white;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-size:16px;
+}
+
+.challenge{
+background:#0c1f4d;
+padding:20px;
+border-radius:15px;
+margin-top:20px;
+white-space:pre-wrap;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🔥 Daily Challenge</h1>
+
+<button onclick="getChallenge()">
+Get Today's Challenge
+</button>
+
+<div id="challenge" class="challenge">
+
+Today's challenge will appear here.
+
+</div>
+
+</div>
+
+<script>
+
+async function getChallenge(){
+
+document.getElementById("challenge").innerHTML =
+"🤖 Generating challenge...";
+
+try{
+
+const response = await fetch(
+"https://kumskid-nova-ai.pages.dev/groq",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+
+model:"llama-3.3-70b-versatile",
+
+messages:[
+{
+role:"system",
+content:`
+You are KUMSKID Daily Challenge Generator.
+
+Generate ONE WAEC/JAMB style question.
+
+Requirements:
+
+1. Random subject
+2. Four options A-D
+3. Show correct answer
+4. Give short explanation
+`
+}
+],
+
+temperature:0.9
+
+})
+}
+);
+
+const data = await response.json();
+
+let challenge =
+data.choices?.[0]?.message?.content ||
+"No challenge generated.";
+
+document.getElementById("challenge").innerText =
+challenge;
+
+}
+catch(error){
+
+document.getElementById("challenge").innerHTML =
+"❌ Error generating challenge.";
+
+console.log(error);
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
