@@ -124,6 +124,42 @@ Ask any academic question.
 
 <script>
 
+let currentUser = null;
+let userProfile = null;
+
+async function loadUser(){
+
+const {
+data: { session }
+} =
+await supabaseClient.auth.getSession();
+
+if(!session){
+
+window.location.href =
+"login.html";
+
+return;
+
+}
+
+currentUser = session.user;
+
+const { data } =
+await supabaseClient
+.from("profiles")
+.select("*")
+.eq("id", currentUser.id)
+.single();
+
+userProfile = data;
+
+}
+
+loadUser();
+
+</script>
+
 async function askTutor(){
 
 let subject =
