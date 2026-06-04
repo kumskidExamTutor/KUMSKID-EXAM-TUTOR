@@ -62,6 +62,10 @@ margin-top:10px;
 
 <h1 id="welcome">🎓 Student Dashboard</h1>
 
+ <p id="userEmail"></p>
+
+<p id="userTier"></p>
+
 <p>Select a subject to begin practice</p>
 <div class="card">
 
@@ -218,11 +222,42 @@ checkLogin();
 
 <script>
 
-let studentName =
-localStorage.getItem("studentName") || "Student";
+async function loadProfile(){
+
+const {
+data: { session }
+} =
+await supabaseClient.auth.getSession();
+
+if(!session){
+
+window.location.href =
+"login.html";
+
+return;
+
+}
+
+const { data } =
+await supabaseClient
+.from("profiles")
+.select("*")
+.eq("id", session.user.id)
+.single();
 
 document.getElementById("welcome").innerHTML =
-"🎓 Welcome " + studentName;
+"🎓 Welcome " +
+(data.full_name || "Student");
+
+document.getElementById("userEmail").innerHTML =
+"📧 " + session.user.email;
+
+document.getElementById("userTier").innerHTML =
+"👑 " + data.subscription_tier.toUpperCase();
+
+}
+
+loadProfile();
 
 </script>
   <script>
