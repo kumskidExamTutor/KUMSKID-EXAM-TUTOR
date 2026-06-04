@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Register - KUMSKID Exam Tutor</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
 
 <style>
 
@@ -66,10 +70,6 @@ cursor:pointer;
 margin-top:10px;
 }
 
-button:hover{
-opacity:.9;
-}
-
 .login-link{
 text-align:center;
 margin-top:20px;
@@ -125,7 +125,7 @@ Already have an account?
 
 <script>
 
-function registerUser(){
+async function registerUser(){
 
 const name =
 document.getElementById("name").value;
@@ -145,17 +145,64 @@ return;
 
 }
 
-localStorage.setItem("studentName",name);
-localStorage.setItem("studentEmail",email);
+document.getElementById("message").innerHTML =
+"Creating account...";
+
+try{
+
+const { data, error } =
+await supabaseClient.auth.signUp({
+
+email: email,
+
+password: password,
+
+options:{
+data:{
+full_name:name
+}
+}
+
+});
+
+if(error){
+
+document.getElementById("message").innerHTML =
+"❌ " + error.message;
+
+return;
+
+}
+
+localStorage.setItem(
+"studentName",
+name
+);
+
+localStorage.setItem(
+"studentEmail",
+email
+);
 
 document.getElementById("message").innerHTML =
 "✅ Registration Successful";
 
 setTimeout(()=>{
 
-window.location.href="login.html";
+window.location.href =
+"login.html";
 
 },1500);
+
+}
+catch(err){
+
+document.getElementById("message").innerHTML =
+"❌ Registration Failed";
+
+console.log(err);
+
+}
 
 }
 
