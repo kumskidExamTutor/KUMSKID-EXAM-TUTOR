@@ -6,6 +6,9 @@
 
 <title>KUMSKID Exam Tutor Dashboard</title>
 
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+ 
 <style>
 
 body{
@@ -188,6 +191,30 @@ View Badges
 Upgrade Now
 </a>
  </div>
+
+ <script>
+
+async function checkLogin(){
+
+const {
+data: { session }
+} =
+await supabaseClient.auth.getSession();
+
+if(!session){
+
+window.location.href =
+"login.html";
+
+return;
+
+}
+
+}
+
+checkLogin();
+
+ </script>
 
 <script>
 
