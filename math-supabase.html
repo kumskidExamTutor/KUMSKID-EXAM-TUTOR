@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>WAEC Mathematics CBT</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#020f2b;
+color:white;
+padding:20px;
+}
+
+.container{
+max-width:800px;
+margin:auto;
+background:#0c1f4d;
+padding:25px;
+border-radius:15px;
+}
+
+h1{
+text-align:center;
+}
+
+#timer{
+font-size:22px;
+text-align:center;
+margin:15px 0;
+color:#2d8cff;
+font-weight:bold;
+}
+
+#counter{
+text-align:center;
+margin-bottom:20px;
+}
+
+#question{
+font-size:22px;
+margin:20px 0;
+}
+
+.option{
+display:block;
+padding:12px;
+margin:10px 0;
+background:#132b66;
+border-radius:10px;
+cursor:pointer;
+}
+
+.buttons{
+display:flex;
+justify-content:center;
+gap:10px;
+flex-wrap:wrap;
+margin-top:20px;
+}
+
+button{
+padding:12px 25px;
+background:#2d8cff;
+color:white;
+border:none;
+border-radius:10px;
+cursor:pointer;
+}
+
+.loading{
+text-align:center;
+font-size:20px;
+padding:30px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>WAEC Mathematics CBT</h1>
+
+<div id="timer">
+Time Left: 10:00
+</div>
+
+<h3 id="counter"></h3>
+
+<div id="question" class="loading">
+Loading questions...
+</div>
+
+<div id="options"></div>
+
+<div class="buttons">
+
+<button onclick="previousQuestion()">
+Previous
+</button>
+
+<button onclick="nextQuestion()">
+Next
+</button>
+
+<button onclick="submitExam()">
+Submit Exam
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+let questions = [];
+
+let currentQuestion = 0;
+
+let userAnswers = [];
+
+let timeLeft = 600;
+
+let currentUser = null;
+
+async function loadUser(){
+
+const {
+data:{session}
+}
+=
+await supabaseClient.auth.getSession();
+
+if(!session){
+
+window.location.href =
+"login.html";
+
+return;
+
+}
+
+currentUser = session.user;
+
+}
+
+async function loadQuestions(){
+
+await loadUser();
+
+const { data , error } =
+await supabaseClient
+.from("questions")
+.select("*")
+.eq("subject_id",1);
+
+if(error){
+
+document.getElementById("question").innerHTML =
+"❌ Failed to load Mathematics questions.";
+
+console.log(error);
+
+return;
+
+}
+questions = data.sort(() => 0.5 - Math.random()).slice(0,20);
+
+userAnswers =
+new Array(questions.length).fill(null);
+
+loadQuestion();
+
+}
+
+function loadQuestion(){
+
+if(questions.length === 0){
+return;
+}
+
+document.getElementById("counter").innerHTML =
+"Question " +
+(currentQuestion + 1) +
+" of " +
+questions.length;
+
+document.getElementById("question").innerHTML =
+questions[currentQuestion].question_text;
+
+let options =
+JSON.parse(
+questions[currentQuestion].options
+);
+
+let html = "";
+
+options.forEach(option => {
+
+let checked =
+userAnswers[currentQuestion] === option
+? "checked"
+: "";
+
+html += `
+<label class="option">
+<input
+type="radio"
+name="answer"
+value="${option}"
+${checked}>
+${option}
+</label>
+`;
+
+});
+
+document.getElementById("options").innerHTML =
+html;
+
+}
+
+function saveAnswer(){
+
+const selected =
+document.querySelector(
+'input[name="answer"]:checked'
+);
+
+if(selected){
+
+userAnswers[currentQuestion] =
+selected.value;
+
+}
+
+}
+
+function nextQuestion(){
+
+saveAnswer();
+
+if(
+currentQuestion <
+questions.length - 1
+){
+
+currentQuestion++;
+
+loadQuestion();
+
+}
+
+}
+
+function previousQuestion(){
+
+saveAnswer();
+
+if(currentQuestion > 0){
+
+currentQuestion--;
+
+loadQuestion();
+
+}
+
+}
+  function submitExam(){
+
+saveAnswer();
+
+let score = 0;
+
+for(let i = 0; i < questions.length; i++){
+
+let options =
+JSON.parse(
+questions[i].options
+);
+
+let correctAnswer = "";
+
+switch(questions[i].correct_option){
+
+case "A":
+correctAnswer = options[0];
+break;
+
+case "B":
+correctAnswer = options[1];
+break;
+
+case "C":
+correctAnswer = options[2];
+break;
+
+case "D":
+correctAnswer = options[3];
+break;
+
+}
+
+if(userAnswers[i] === correctAnswer){
+
+score++;
+
+}
+
+}
+
+localStorage.setItem(
+"examSubject",
+"Mathematics"
+);
+
+localStorage.setItem(
+"examScore",
+score
+);
+
+localStorage.setItem(
+"examTotal",
+questions.length
+);
+
+let history =
+JSON.parse(
+localStorage.getItem("examHistory")
+) || [];
+
+history.push({
+
+subject:"Mathematics",
+
+score:score,
+
+total:questions.length,
+
+percentage:Math.round(
+(score/questions.length)*100
+)
+
+});
+
+localStorage.setItem(
+"examHistory",
+JSON.stringify(history)
+);
+
+window.location.href =
+"result.html";
+
+}
+
+const timer =
+setInterval(() => {
+
+let minutes =
+Math.floor(timeLeft / 60);
+
+let seconds =
+timeLeft % 60;
+
+document.getElementById("timer").innerHTML =
+"Time Left: " +
+minutes +
+":" +
+(seconds < 10 ? "0" : "") +
+seconds;
+
+timeLeft--;
+
+if(timeLeft < 0){
+
+clearInterval(timer);
+
+submitExam();
+
+}
+
+},1000);
+
+loadQuestions();
+
+</script>
+
+</body>
+</html>
