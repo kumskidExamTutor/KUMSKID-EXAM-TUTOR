@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>WAEC Mathematics CBT</title>
+<title>WAEC English Language CBT</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
@@ -87,7 +87,7 @@ padding:30px;
 
 <div class="container">
 
-<h1>WAEC Mathematics CBT</h1>
+<h1>WAEC English Language CBT</h1>
 
 <div id="timer">
 Time Left: 10:00
@@ -160,7 +160,7 @@ const { data , error } =
 await supabaseClient
 .from("questions")
 .select("*")
-.eq("subject_id",1);
+.eq("subject_id",2);
 
 if(error){
 
@@ -317,7 +317,7 @@ score++;
 
 localStorage.setItem(
 "examSubject",
-"Mathematics"
+"English Language"
 );
 
 localStorage.setItem(
@@ -337,7 +337,7 @@ localStorage.getItem("examHistory")
 
 history.push({
 
-subject:"Mathematics",
+subject:"English Language",
 
 score:score,
 
