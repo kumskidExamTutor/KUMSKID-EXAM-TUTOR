@@ -3,9 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WAEC English CBT</title>
+
+<title>WAEC Mathematics CBT</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
 
 <style>
+
 body{
 font-family:Arial,sans-serif;
 background:#020f2b;
@@ -69,9 +74,12 @@ border-radius:10px;
 cursor:pointer;
 }
 
-button:hover{
-opacity:.9;
+.loading{
+text-align:center;
+font-size:20px;
+padding:30px;
 }
+
 </style>
 </head>
 
@@ -79,79 +87,123 @@ opacity:.9;
 
 <div class="container">
 
-<h1>WAEC English CBT</h1>
+<h1>WAEC Mathematics CBT</h1>
 
-<div id="timer">Time Left: 10:00</div>
+<div id="timer">
+Time Left: 10:00
+</div>
 
 <h3 id="counter"></h3>
 
-<div id="question"></div>
+<div id="question" class="loading">
+Loading questions...
+</div>
 
 <div id="options"></div>
 
 <div class="buttons">
-<button onclick="previousQuestion()">Previous</button>
-<button onclick="nextQuestion()">Next</button>
-<button onclick="submitExam()">Submit Exam</button>
+
+<button onclick="previousQuestion()">
+Previous
+</button>
+
+<button onclick="nextQuestion()">
+Next
+</button>
+
+<button onclick="submitExam()">
+Submit Exam
+</button>
+
 </div>
 
 </div>
 
 <script>
 
-const questions = [
-
-{
-question:"Choose the correctly spelt word.",
-options:["Accomodation","Accommodation","Acommodation","Acommodatoin"],
-answer:"Accommodation"
-},
-
-{
-question:"Select the synonym of Happy.",
-options:["Sad","Joyful","Angry","Weak"],
-answer:"Joyful"
-},
-
-{
-question:"Choose the correct sentence.",
-options:[
-"He go to school everyday",
-"He goes to school every day",
-"He going to school every day",
-"He gone to school everyday"
-],
-answer:"He goes to school every day"
-},
-
-{
-question:"Identify the noun in the sentence: The boy kicked the ball.",
-options:["kicked","the","boy","ball"],
-answer:"boy"
-},
-
-{
-question:"Choose the opposite of Brave.",
-options:["Bold","Fearful","Strong","Wise"],
-answer:"Fearful"
-}
-
-];
+let questions = [];
 
 let currentQuestion = 0;
-let userAnswers = new Array(questions.length).fill(null);
+
+let userAnswers = [];
+
+let timeLeft = 600;
+
+let currentUser = null;
+
+async function loadUser(){
+
+const {
+data:{session}
+}
+=
+await supabaseClient.auth.getSession();
+
+if(!session){
+
+window.location.href =
+"login.html";
+
+return;
+
+}
+
+currentUser = session.user;
+
+}
+
+async function loadQuestions(){
+
+await loadUser();
+
+const { data , error } =
+await supabaseClient
+.from("questions")
+.select("*")
+.eq("subject_id",1);
+
+if(error){
+
+document.getElementById("question").innerHTML =
+"❌ Failed to load Mathematics questions.";
+
+console.log(error);
+
+return;
+}
+console.log(questions);
+console.log(data);
+questions = data.sort(() => 0.5 - Math.random()).slice(0,20);
+console.log("Questions loaded:", questions);
+  
+userAnswers =
+new Array(questions.length).fill(null);
+
+loadQuestion();
+
+}
 
 function loadQuestion(){
 
+if(questions.length === 0){
+return;
+}
+
 document.getElementById("counter").innerHTML =
-"Question " + (currentQuestion + 1) + " of " + questions.length;
+"Question " +
+(currentQuestion + 1) +
+" of " +
+questions.length;
 
 document.getElementById("question").innerHTML =
-questions[currentQuestion].question;
+questions[currentQuestion].question_text;
+
+let options =
+questions[currentQuestion].options;
 
 let html = "";
 
-questions[currentQuestion].options.forEach(option => {
+options.forEach(option => {
 
 let checked =
 userAnswers[currentQuestion] === option
@@ -160,7 +212,8 @@ userAnswers[currentQuestion] === option
 
 html += `
 <label class="option">
-<input type="radio"
+<input
+type="radio"
 name="answer"
 value="${option}"
 ${checked}>
@@ -170,17 +223,23 @@ ${option}
 
 });
 
-document.getElementById("options").innerHTML = html;
+document.getElementById("options").innerHTML =
+html;
 
 }
 
 function saveAnswer(){
 
 const selected =
-document.querySelector('input[name="answer"]:checked');
+document.querySelector(
+'input[name="answer"]:checked'
+);
 
 if(selected){
-userAnswers[currentQuestion] = selected.value;
+
+userAnswers[currentQuestion] =
+selected.value;
+
 }
 
 }
@@ -189,9 +248,15 @@ function nextQuestion(){
 
 saveAnswer();
 
-if(currentQuestion < questions.length - 1){
+if(
+currentQuestion <
+questions.length - 1
+){
+
 currentQuestion++;
+
 loadQuestion();
+
 }
 
 }
@@ -201,38 +266,87 @@ function previousQuestion(){
 saveAnswer();
 
 if(currentQuestion > 0){
+
 currentQuestion--;
+
 loadQuestion();
-}
 
 }
 
-function submitExam(){
+}
+  function submitExam(){
 
 saveAnswer();
 
 let score = 0;
 
-for(let i=0;i<questions.length;i++){
+for(let i = 0; i < questions.length; i++){
 
-if(userAnswers[i] === questions[i].answer){
+let options =
+questions[i].options;
+
+let correctAnswer = "";
+
+switch(questions[i].correct_option){
+
+case "A":
+correctAnswer = options[0];
+break;
+
+case "B":
+correctAnswer = options[1];
+break;
+
+case "C":
+correctAnswer = options[2];
+break;
+
+case "D":
+correctAnswer = options[3];
+break;
+
+}
+
+if(userAnswers[i] === correctAnswer){
+
 score++;
-}
 
 }
 
-localStorage.setItem("examSubject", "English Language");
-localStorage.setItem("examScore", score);
-localStorage.setItem("examTotal", questions.length);
+}
+
+localStorage.setItem(
+"examSubject",
+"Mathematics"
+);
+
+localStorage.setItem(
+"examScore",
+score
+);
+
+localStorage.setItem(
+"examTotal",
+questions.length
+);
 
 let history =
-JSON.parse(localStorage.getItem("examHistory")) || [];
+JSON.parse(
+localStorage.getItem("examHistory")
+) || [];
 
 history.push({
-subject: "English Language",
-score: score,
-total: questions.length,
-percentage: Math.round((score/questions.length)*100)
+
+subject:"Mathematics",
+
+score:score,
+
+total:questions.length,
+
+percentage:Math.round(
+(score/questions.length)*100
+)
+
 });
 
 localStorage.setItem(
@@ -240,19 +354,24 @@ localStorage.setItem(
 JSON.stringify(history)
 );
 
-window.location.href = "result.html";
+window.location.href =
+"result.html";
+
 }
 
-let timeLeft = 600;
+const timer =
+setInterval(() => {
 
-const timer = setInterval(() => {
+let minutes =
+Math.floor(timeLeft / 60);
 
-let minutes = Math.floor(timeLeft / 60);
-let seconds = timeLeft % 60;
+let seconds =
+timeLeft % 60;
 
 document.getElementById("timer").innerHTML =
 "Time Left: " +
-minutes + ":" +
+minutes +
+":" +
 (seconds < 10 ? "0" : "") +
 seconds;
 
@@ -268,7 +387,7 @@ submitExam();
 
 },1000);
 
-loadQuestion();
+loadQuestions();
 
 </script>
 
