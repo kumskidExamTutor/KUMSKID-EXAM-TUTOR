@@ -274,7 +274,7 @@ loadQuestion();
 }
 
 }
-  function submitExam(){
+  async submitExam(){
 
 saveAnswer();
 
@@ -353,6 +353,34 @@ localStorage.setItem(
 "examHistory",
 JSON.stringify(history)
 );
+
+const {
+data:{session}
+}
+=
+await supabaseClient.auth.getSession();
+
+if(session){
+
+await supabaseClient
+.from("quiz_attempts")
+.insert([{
+
+user_id: session.user.id,
+
+subject: "Mathematics",
+
+score: score,
+
+total: questions.length,
+
+percentage: Math.round(
+(score/questions.length)*100
+)
+
+}]);
+
+}
 
 window.location.href =
 "result.html";
