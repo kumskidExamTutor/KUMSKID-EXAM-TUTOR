@@ -160,12 +160,12 @@ const { data , error } =
 await supabaseClient
 .from("questions")
 .select("*")
-.eq("subject_id",2);
+.eq("subject_id",4);
 
 if(error){
 
 document.getElementById("question").innerHTML =
-"❌ Failed to load Mathematics questions.";
+"❌ Failed to load Chemistry questions.";
 
 console.log(error);
 
