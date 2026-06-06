@@ -363,8 +363,15 @@ await supabaseClient.auth.getSession();
 if(session){
 
 await supabaseClient
-.from("quiz_attempts")
+.from("results")
 .insert([{
+student_id: session.user.id,
+subject: "Mathematics",
+exam_type: "WAEC",
+score: score,
+total: questions.length,
+time_taken: 600 - timeLeft
+}]);
 
 user_id: session.user.id,
 
