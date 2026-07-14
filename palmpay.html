@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PalmPay</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f5f5f7;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 16px 0 0 0;
+        }
+
+        /* Main phone frame */
+        .phone {
+            width: 393px;
+            min-height: 852px;
+            background: #f8f5ff;
+            border-radius: 44px;
+            box-shadow: 0 20px 60px rgba(90, 24, 154, 0.15), 0 8px 24px rgba(0,0,0,0.08);
+            overflow: hidden;
+            position: relative;
+            padding-bottom: 90px;
+            border: 1px solid rgba(90, 24, 154, 0.08);
+        }
+
+        /* Status bar */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 28px 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+            background: #f8f5ff;
+        }
+
+        .status-bar .time {
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .status-icons {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .status-icons svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 20px 12px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-left .greeting {
+            font-size: 13px;
+            color: #888;
+            font-weight: 400;
+        }
+        .header-left .greeting strong {
+            display: block;
+            font-size: 17px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-top: 1px;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+        .header-right .icon-btn {
+            background: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            cursor: pointer;
+            font-size: 18px;
+            color: #5a189a;
+        }
+
+        /* Balance Card */
+        .balance-card {
+            background: linear-gradient(135deg, #5a189a 0%, #3c096c 40%, #240046 100%);
+            margin: 4px 16px 16px;
+            border-radius: 24px;
+            padding: 24px 22px 22px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(90, 24, 154, 0.25);
+        }
+
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .balance-card::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(156, 66, 245, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .balance-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .balance-label {
+            font-size: 13px;
+            font-weight: 400;
+            opacity: 0.85;
+            letter-spacing: 0.3px;
+        }
+
+        .balance-visibility {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            backdrop-filter: blur(4px);
+        }
+
+        .balance-amount {
+            font-size: 34px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 1;
+            margin: 2px 0 6px;
+        }
+
+        .balance-amount .currency {
+            font-size: 20px;
+            font-weight: 600;
+            margin-right: 2px;
+        }
+
+        .balance-row {
+            display: flex;
+            gap: 24px;
+            position: relative;
+            z-index: 1;
+            margin-top: 8px;
+        }
+
+        .balance-row .item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            opacity: 0.85;
+        }
+        .balance-row .item svg {
+            width: 14px;
+            height: 14px;
+            fill: rgba(255,255,255,0.6);
+        }
+        .balance-row .item strong {
+            font-weight: 600;
+            opacity: 1;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            justify-content: space-around;
+            padding: 6px 16px 16px;
+            gap: 4px;
+        }
+
+        .quick-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .quick-action .icon-circle {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            transition: transform 0.15s ease;
+        }
+
+        .quick-action:active .icon-circle {
+            transform: scale(0.92);
+        }
+
+        .quick-action .label {
+            font-size: 11px;
+            font-weight: 500;
+            color: #444;
+        }
+
+        .qa-transfer .icon-circle { background: #e8d5f5; color: #5a189a; }
+        .qa-airtime .icon-circle { background: #d5f0e8; color: #0d7a5f; }
+        .qa-data .icon-circle { background: #d5e8f5; color: #1a5a9a; }
+        .qa-bills .icon-circle { background: #f5e8d5; color: #b86b1a; }
+        .qa-more .icon-circle { background: #f0d5f5; color: #9a1a8a; }
+
+        /* Features / Services Grid */
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px 8px;
+        }
+
+        .section-title h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        .section-title a {
+            font-size: 13px;
+            color: #5a189a;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+            padding: 0 16px 8px;
+        }
+
+        .service-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 12px 4px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: background 0.15s;
+        }
+
+        .service-item:active {
+            background: rgba(90, 24, 154, 0.06);
+        }
+
+        .service-item .s-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 2px;
+        }
+
+        .service-item .s-label {
+            font-size: 10px;
+            font-weight: 500;
+            color: #444;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        /* Savings & Investment section */
+        .savings-carousel {
+            display: flex;
+            gap: 12px;
+            padding: 0 16px 12px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .savings-carousel::-webkit-scrollbar { display: none; }
+
+        .savings-card {
+            min-width: 160px;
+            background: white;
+            border-radius: 18px;
+            padding: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            border: 1px solid rgba(90,24,154,0.06);
+            flex-shrink: 0;
+        }
+
+        .savings-card .sc-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 2px;
+        }
+        .savings-card .sc-rate {
+            font-size: 22px;
+            font-weight: 800;
+            color: #5a189a;
+        }
+        .savings-card .sc-rate span {
+            font-size: 13px;
+            font-weight: 500;
+            color: #888;
+        }
+        .savings-card .sc-desc {
+            font-size: 11px;
+            color: #888;
+            margin-top: 4px;
+        }
+        .savings-card .sc-bal {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-top: 8px;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #f0eaf8;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 12px;
+            border-radius: 0 0 44px 44px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 10px;
+            color: #999;
+            font-weight: 500;
+            padding: 4px 12px;
+            transition: color 0.15s;
+        }
+
+        .nav-item.active {
+            color: #5a189a;
+        }
+
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .nav-item.active svg {
+            fill: #5a189a;
+        }
+
+        /* Hidden overlay for tap actions */
+        .tap-feedback {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(90,24,154,0.1);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            backdrop-filter: blur(4px);
+        }
+
+        .tap-feedback.show {
+            display: flex;
+        }
+
+        .tap-feedback .modal {
+            background: white;
+            border-radius: 24px;
+            padding: 32px 28px 24px;
+            width: 320px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            animation: popIn 0.25s ease;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.85); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .tap-feedback .modal .m-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        .tap-feedback .modal h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 6px;
+        }
+        .tap-feedback .modal p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 18px;
+        }
+        .tap-feedback .modal .btn-close {
+            background: #5a189a;
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .tap-feedback .modal .btn-close:active {
+            opacity: 0.8;
+        }
+
+        .hidden-balance {
+            filter: blur(20px);
+            user-select: none;
+        }
+
+        /* Notification badge */
+        .badge-dot {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 10px;
+            height: 10px;
+            background: #ef4444;
+            border: 2px solid #f8f5ff;
+            border-radius: 50%;
+        }
+
+        .icon-btn {
+            position: relative;
+        }
+
+        /* Small tweaks */
+        .mt-2 { margin-top: 2px; }
+        .text-muted { color: #999; font-size: 11px; }
+    </style>
+</head>
+<body>
+
+<div class="phone" id="app">
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <span class="time" id="statusTime">09:41</span>
+        <div class="status-icons">
+            <svg viewBox="0 0 24 24" fill="#333"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#333"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <div class="greeting">
+                Good morning
+                <strong>👋 Chisom</strong>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="icon-btn" onclick="showModal('Notifications','You have 3 new notifications.\n• Cashback earned: ₦250\n• SmartEarn interest: ₦1,420\n• Bill reminder: PHCN due')">
+                <span>🔔</span>
+                <span class="badge-dot"></span>
+            </button>
+            <button class="icon-btn" onclick="showModal('Profile','Chisom Okafor\n+234 803 456 7890\nTier 3 Account\nMember since 2024')">👤</button>
+        </div>
+    </div>
+
+    <!-- Balance Card -->
+    <div class="balance-card">
+        <div class="balance-top">
+            <span class="balance-label">Available Balance</span>
+            <button class="balance-visibility" id="toggleBalance" onclick="toggleBalance()">👁</button>
+        </div>
+        <div class="balance-amount" id="balanceDisplay">
+            <span class="currency">₦</span>90,000.00
+        </div>
+        <div class="balance-row">
+            <div class="item">
+                <svg viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                <span>Account: <strong>****7890</strong></span>
+            </div>
+            <div class="item">
+                <svg viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)"><path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-7 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14c-2.33 0-4.31-.84-5.66-2.24.09-1.87 3.12-3.26 5.66-3.26s5.57 1.39 5.66 3.26C16.31 19.16 14.33 20 12 20z"/></svg>
+                <span>Tier 3</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <button class="quick-action qa-transfer" onclick="showModal('Transfer','Free transfers to all banks\nAvailable balance: ₦90,000.00\n\nRecipient: ____________\nAmount: ₦____________\nNarration: ____________')">
+            <div class="icon-circle">↗</div>
+            <span class="label">Transfer</span>
+        </button>
+        <button class="quick-action qa-airtime" onclick="showModal('Buy Airtime','Top up instantly\n\n📱 Phone: ____________\n💰 Amount: ____________\n\nNetworks: MTN | Glo | Airtel | 9Mobile')">
+            <div class="icon-circle">📞</div>
+            <span class="label">Airtime</span>
+        </button>
+        <button class="quick-action qa-data" onclick="showModal('Buy Data','Choose your data bundle\n\n📱 Phone: ____________\n📦 Plan: ____________\n\nMTN • Glo • Airtel • 9Mobile\nSocial bundles available')">
+            <div class="icon-circle">📶</div>
+            <span class="label">Data</span>
+        </button>
+        <button class="quick-action qa-bills" onclick="showModal('Pay Bills','Electricity | TV | Internet | Water\n\n• PHCN / EKEDC / IKEDC / AEDC\n• DStv • GOtv • Startimes\n• Spectranet • Smile\n• Water payments')">
+            <div class="icon-circle">💡</div>
+            <span class="label">Bills</span>
+        </button>
+        <button class="quick-action qa-more" onclick="showModal('More Services','All PalmPay services\n\n↗ Transfer\n📞 Airtime\n📶 Data\n💡 Bills\n💰 Cashbox Savings\n📈 SmartEarn\n🏦 Loan\n💳 PalmPay Card\n🎮 Airtime to Cash\n📄 View all →')">
+            <div class="icon-circle">⋯</div>
+            <span class="label">More</span>
+        </button>
+    </div>
+
+    <!-- Services Grid -->
+    <div class="section-title">
+        <h3>Services</h3>
+        <a href="#" onclick="event.preventDefault(); showModal('All Services','Showing all PalmPay services: Transfer, Airtime, Data, Bills, Cable TV, Electricity, Insurance, Savings, Loans, PalmPay Card, Airtime to Cash, POS, Buy Gift Cards, Payday Loan, and more.')">See all →</a>
+    </div>
+
+    <div class="services-grid">
+        <button class="service-item" onclick="showModal('Cable TV','DStv • GOtv • Startimes\n\nSubscribe and pay for your TV subscription instantly.')">
+            <div class="s-icon" style="background:#f0e6ff;color:#5a189a;">📺</div>
+            <span class="s-label">Cable TV</span>
+        </button>
+        <button class="service-item" onclick="showModal('Electricity','Prepaid & Postpaid\n\n• PHCN\n• EKEDC\n• IKEDC\n• AEDC\n• Kaduna Electric\nEnter meter number:')">
+            <div class="s-icon" style="background:#fff0e0;color:#e07c00;">💡</div>
+            <span class="s-label">Electricity</span>
+        </button>
+        <button class="service-item" onclick="showModal('Internet','Internet service providers\n\n• Spectranet\n• Smile\n• Swift\n• ipNX\n• FibreOne')">
+            <div class="s-icon" style="background:#e0f0ff;color:#0066cc;">🌐</div>
+            <span class="s-label">Internet</span>
+        </button>
+        <button class="service-item" onclick="showModal('Airtime to Cash','Convert your airtime to cash\n\n1. Enter phone number\n2. Select amount\n3. Receive cash instantly\n\nCharges apply')">
+            <div class="s-icon" style="background:#ffe0e8;color:#cc0044;">💱</div>
+            <span class="s-label">Airtime→Cash</span>
+        </button>
+        <button class="service-item" onclick="showModal('Cashbox','Up to 20% interest p.a.\n\nBalance: ₦12,500.00\nInterest earned: ₦420.00\n\nWithdraw anytime • No fees')">
+            <div class="s-icon" style="background:#e6ffe6;color:#008040;">💰</div>
+            <span class="s-label">Cashbox</span>
+        </button>
+        <button class="service-item" onclick="showModal('SmartEarn','22% annualized interest\n\nBalance: ₦25,000.00\nInterest earned: ₦1,420.00\n\nInstant withdrawals • No redemption fees')">
+            <div class="s-icon" style="background:#e6f0ff;color:#0040cc;">📈</div>
+            <span class="s-label">SmartEarn</span>
+        </button>
+        <button class="service-item" onclick="showModal('Loans','Powered by Blooms MFB Ltd.\n\nLoan amount: ₦2,000 – ₦500,000\nRepayment: 61 days – 6 months\nAPR up to 36% p.a.\n\nYou are pre-qualified for ₦50,000')">
+            <div class="s-icon" style="background:#fff0f5;color:#cc0066;">🏦</div>
+            <span class="s-label">Loan</span>
+        </button>
+        <button class="service-item" onclick="showModal('PalmPay Card','Free ATM card\n\nZero maintenance fee\nZero SMS alert fee\nAccepted at POS, ATM, Online\n\nOrder now →')">
+            <div class="s-icon" style="background:#f5f0ff;color:#6600cc;">💳</div>
+            <span class="s-label">Card</span>
+        </button>
+    </div>
+
+    <!-- Savings & Investment -->
+    <div class="section-title">
+        <h3>Save & Invest</h3>
+        <a href="#" onclick="event.preventDefault(); showModal('Save & Invest','Cashbox: Up to 20% p.a.\nSmartEarn: 22% p.a.\nMutual Funds • Insurance\nStart saving today!')">View all →</a>
+    </div>
+
+    <div class="savings-carousel">
+        <div class="savings-card" onclick="showModal('Cashbox','Flexible savings wallet\n\nBalance: ₦12,500.00\nInterest rate: Up to 20% p.a.\nInterest earned: ₦420.00\n\n24/7 withdrawals • No penalties')">
+            <div class="sc-title">Cashbox</div>
+            <div class="sc-rate">20% <span>p.a.</span></div>
+            <div class="sc-desc">Flexible savings</div>
+            <div class="sc-bal">₦12,500.00</div>
+        </div>
+        <div class="savings-card" onclick="showModal('SmartEarn','High-yield investment\n\nBalance: ₦25,000.00\nInterest rate: 22% p.a.\nInterest earned: ₦1,420.00\n\nInstant withdrawals • No redemption fees')">
+            <div class="sc-title">SmartEarn</div>
+            <div class="sc-rate">22% <span>p.a.</span></div>
+            <div class="sc-desc">High-yield investment</div>
+            <div class="sc-bal">₦25,000.00</div>
+        </div>
+        <div class="savings-card" onclick="showModal('Mutual Funds','Diversified investment portfolios\n\nStart from ₦1,000\nProfessional fund management\nHistorical returns: 15-40% p.a.')">
+            <div class="sc-title">Mutual Funds</div>
+            <div class="sc-rate">Up to 40% <span>p.a.</span></div>
+            <div class="sc-desc">Diversified portfolios</div>
+            <div class="sc-bal">₦0.00</div>
+        </div>
+    </div>
+
+    <!-- Spacer -->
+    <div style="height: 8px;"></div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <button class="nav-item active" onclick="showModal('Home','You are on the Home screen')">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span>Home</span>
+        </button>
+        <button class="nav-item" onclick="showModal('Transactions','Recent transactions\n\n• Airtime top-up: -₦500\n• Data purchase: -₦1,000\n• Transfer to Bank: -₦5,000\n• Cashbox deposit: +₦2,000\n• SmartEarn interest: +₦1,420\n')">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-7 14l-5-5 1.41-1.41L11 14.17l8.59-8.59L21 7l-9 9z"/></svg>
+            <span>History</span>
+        </button>
+        <button class="nav-item" onclick="showModal('Payments','Make payments\n\nPay to: PalmPay user, Bank account\nScan to pay • Request payment')">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+            <span>Pay</span>
+        </button>
+        <button class="nav-item" onclick="showModal('Savings','Your savings\n\nCashbox: ₦12,500.00\nSmartEarn: ₦25,000.00\nMutual Funds: ₦0.00\n\nTotal invested: ₦37,500.00')">
+            <svg viewBox="0 0 24 24"><path d="M11.5 1L8 5h3v4H8l3.5 4L15 9h-3V5h3L11.5 1zM6 12l-3.5 4H6
